@@ -1,8 +1,8 @@
 FROM php:7.3-apache
 
 RUN apt-get update && \
-apt-get install -y wget nginx supervisor libapache2-mod-rpaf sudo git mc net-tools openssh-server mysql-client vim nano msmtp \
-	cron gcc make libjpeg-dev libpng-dev libtiff-dev libvpx-dev libxpm-dev libfontconfig1-dev libxpm-dev checkinstall \
+apt-get install -y wget nginx supervisor libapache2-mod-rpaf sudo git mc net-tools openssh-server default-mysql-client vim nano msmtp \
+	cron gcc make libjpeg-dev libpng-dev libtiff-dev libvpx-dev libxpm-dev libfontconfig1-dev libxpm-dev \
 	libicu-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -69,6 +69,9 @@ WORKDIR /home/sftpdev
 ADD start.sh /
 CMD ["/start.sh"]
 
+RUN sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/sshd ; \
+    sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
+
 
 #COMPOSER
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -81,7 +84,7 @@ RUN chown 33:33 /var/www/
 
 
 #CLEAN
-RUN apt-get remove -y gcc make libjpeg-dev libpng-dev libtiff-dev libvpx-dev libxpm-dev libfontconfig1-dev libxpm-dev checkinstall  libfreetype6-dev \
+RUN apt-get remove -y gcc make libjpeg-dev libpng-dev libtiff-dev libvpx-dev libxpm-dev libfontconfig1-dev libxpm-dev libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libxml2-dev \

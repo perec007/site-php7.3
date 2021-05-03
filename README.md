@@ -2,7 +2,7 @@ example docker-compose.yml
 
 ```
 example.com:
- image: casp/site-php7.2
+ image: casp/site-php7.3
  restart: always
  container_name: example.com
  hostname: example.com
@@ -20,6 +20,10 @@ example.com:
   - "2200:22"
  external_links:
   - mysql_local
+ environment:
+  - SFTPDEV_PASSWD=Kju7hanBd0Y4
+  - "TZ=Etc/GMT-4"
+  
 ```
 Add ssh key to file /srv/docker/docker-sitehosting/example.com/sftpdev-home/.ssh/authorized_keys and login remote by server ip and port 2200.
 
